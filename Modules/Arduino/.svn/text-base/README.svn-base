@@ -1,0 +1,74 @@
+iqr module for the duemilanove arduino board.
+
+This project hosts the iqr source code for communicating with the arduino.
+The firmware residing on the arduino can be downloaded from the 'cyrano'
+project. It has to be downloaded separately and flashed on the arduino before
+the iqr module can communicate with it. Here are the instructions for doing
+that:
+
+Instructions of use (Debian/Ubuntu):
+====================================
+
+- Getting the firmware:
+    - From the cyrano web page:
+      Go to 'http://github.com/debiatan/cyrano/downloads' and download the most
+      recent version of the file 'cyrano.hex'. Flash it with your favorite tool.
+      (To do it using avrdude, try 'avrdude -V -F -C /etc/avrdude.conf -p atmega328p -P /dev/ttyUSB0 -c stk500v1 -b 57600 -U flash:w:cyrano.hex').
+
+    - Building it from source:
+        - Getting the source:
+            - Through git:
+                Install the package git-core.
+                Run 'git clone git://github.com/debiatan/cyrano.git'.
+            - Through your web browser:
+                Visit 'http://github.com/debiatan/cyrano'
+                Click on 'download'.
+        - Building and flashing the firmware:
+            Install the following packages: gcc-avr avr-libc binutils-avr 
+                                            avrdude.
+            Run 'make' inside the 'cyrano' folder to generate the file 
+            'cyrano.hex'.
+            Connect the arduino via USB. Normally, it will be assigned the 
+            device identifier '/dev/ttyUSB0'.
+            Run 'make upload'. If you get a timeout, try pressing the reset 
+            button in the Duemilanove and quickly running 'make upload'.
+
+
+Accessing the arduino I/O ports from iqr:
+=========================================
+
+Only the digital I/O ports of the Duemilanove can be managed for now through 
+iqr. 
+
+Ports 0 and 1 are busy because they are used as part of the USB serial link.
+12 ports are left (2 to 13) to work with.
+
+Open the file 'test.iqr' from inside iqr once you have correctly installed the 'moduleArduino.so' file under ~/iqr/lib/Modules. You will see four groups inside
+the 'arduino' process:
+
+- Comm. digit. read. (Command digital reading).- Send a value different than 0
+to each of its 12 cells in order to command a digital reading of its assigned
+pin (first cell belongs to pin 2; last one to pin 13).
+- Digit. read. (Digital reading).- Once you command a reading, the input value
+will be presented as activity in this group. If you command readings on
+unconnected pins, expect to see random blinking, since the pull-up resistors
+are not active by default.
+- Comm. digit writ. (Command digital writing).- Send a value different than 0 to
+the cell assigned to the pin which you want to access.
+- Digit. writ. (Digital writing).- Once you command a writing, you use this 
+group to manipulate the output value.
+
+Further reading:
+================
+
+If you want to fix and/or extend this module, when reading the 'arduino.h' and
+'arduino.cc' files you will notice that all the low level operations for 
+accessing the analog pins and the PWM outputs are already implemented. Only
+minor tweaking of those files and a little bit of iqr module hacking are required to access the rest of the basic functionality of the Duemilanove.
+If you need to know what the low-level calls in those two file mean, you may be
+glad to know that they share the semantics described by the low-level arduino 
+API:
+          http://arduino.cc/en/Reference/Extended
+
+- License
+    See COPYING

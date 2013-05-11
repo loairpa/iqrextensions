@@ -1,0 +1,236 @@
+#include <sstream>
+#include "arduino.h"
+#include <iostream>
+#include <ostream>
+#include <stdlib.h>
+using namespace std;
+
+typedef enum{
+    __PIN_MODE = 0, __DIGITAL_READ = 1, __DIGITAL_WRITE = 2,
+    __ANALOG_REFERENCE = 3, __ANALOG_READ = 4, __ANALOG_WRITE = 5,
+    __RX = 6,__TX=7
+} OpCode;
+
+Arduino::Arduino(){
+    // Current (initial) values
+    current_digital_pin_modes = vector<int> (10, 0);
+    current_digital_outputs = vector<int> (10, 0);
+
+    current_PWM_pin_modes = vector<int>(2,0);  // Pin 5 & 6  is reserved for the camera
+    current_PWM_outputs = vector<int>(2,0);
+    // Analog
+    current_analog_pin_modes = vector<int> (2, 0);
+
+
+}
+
+void Arduino::write_word(int value){
+    serialPort<<(char)(value/256);
+    serialPort<<(char)(value%256);
+
+}
+
+int Arduino::read_word(){
+    char c_tmp[2];
+
+    serialPort.get(c_tmp[0]);
+    serialPort.get(c_tmp[1]);
+    cout<<((int)c_tmp[0]-48)+ ((int)c_tmp[1]-48)<<endl;
+    return((int)c_tmp[0]-48)+ ((int)c_tmp[1]-48);
+}
+
+void Arduino::empty_buffer(int pin){
+	read_word();
+
+	if(pin>9){
+		char c_tmp[3];
+		serialPort.get(c_tmp[0]);
+		serialPort.get(c_tmp[1]);
+		serialPort.get(c_tmp[2]);
+	}
+	else{read_word();}
+
+
+}
+int Arduino::read_analog_value(){
+	char c_tmp[4];
+
+	serialPort.get(c_tmp[0]);
+	serialPort.get(c_tmp[1]);
+	serialPort.get(c_tmp[2]);
+	serialPort.get(c_tmp[3]);
+	return ((int)c_tmp[0]-48)+ ((int)c_tmp[1]-48)*100+((int)c_tmp[2]-48)*10+ ((int)c_tmp[3]-48);
+}
+
+bool Arduino::open(const string& device){
+    serialPort.Open(device);
+    if(!serialPort.good()){
+        error_message = "Could not open serial port";
+        return false;
+    }
+    serialPort.SetBaudRate(SerialStreamBuf::BAUD_115200);
+    if(!serialPort.good()){
+        serialPort.Close();
+        error_message = "Could not set baud rate";
+        return false;
+    }
+    serialPort.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
+    if(!serialPort.good()){
+        serialPort.Close();
+        error_message = "Could not set char size";
+        return false;
+    }
+    serialPort.SetParity(SerialStreamBuf::PARITY_NONE);
+    if(!serialPort.good()){
+        serialPort.Close();
+        error_message = "Could not disable parity";
+        return false;
+    }
+    serialPort.SetNumOfStopBits(1);
+    if (!serialPort.good()){
+        serialPort.Close();
+        error_message = "Could not set the number of stop bits";
+        return false;
+    }
+    serialPort.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
+    if (!serialPort.good()){
+        serialPort.Close();
+        error_message = "Could not use hardware flow control";
+        return false;
+    }
+
+    return true;
+}
+
+void Arduino::close(){
+    serialPort.Close();
+}
+
+void Arduino::pinMode(int pin, Mode mode){
+    write_word(__PIN_MODE);
+    write_word(pin);
+    write_word(mode);
+    empty_buffer(pin);
+    read_word();
+}
+
+int Arduino::digitalRead(int pin){
+    write_word(__DIGITAL_READ);
+    write_word(pin);
+    empty_buffer(pin);
+    return read_word();
+}
+
+void Arduino::digitalWrite(int pin, BinValue value){
+    write_word(__DIGITAL_WRITE);
+    write_word(pin);
+    write_word(value);
+    empty_buffer(pin);
+    read_word();
+}
+
+void Arduino::analogReference(ReferenceSource source){
+    write_word(__ANALOG_REFERENCE);
+    write_word(source);
+    read_analog_value();
+}
+
+int Arduino::analogRead(int pin){
+    write_word(__ANALOG_READ);
+    write_word(pin);
+    empty_buffer(pin);
+    return read_analog_value();
+}
+
+void Arduino::analogWrite(int pin, int value){
+    write_word(__ANALOG_WRITE);
+    write_word(pin);
+    write_word(value);
+    empty_buffer(pin);
+    read_analog_value();
+
+}
+
+vector<float> Arduino::digitalRead(vector<float> pins){
+    vector<float> reply(pins.size(), 0.);
+
+    for(int i = 0; i < (int)pins.size(); ++i){
+        if(0. != pins[i]){
+            if(INPUT != current_digital_pin_modes[i]){
+		pinMode(i+4, INPUT);
+                current_digital_pin_modes[i] = INPUT;
+            }
+	    reply[i] = (float)digitalRead(i+4);
+
+        }
+        else reply[i] = 0.;  // Back to zero if not commanded
+    }
+
+    return reply;
+}
+
+void Arduino::digitalWrite(vector<float> pins, vector<float> values){
+    for(int i = 0; i < (int)pins.size(); ++i){
+        if(0. != pins[i]){      // Commanded writing
+            if(OUTPUT != current_digital_pin_modes[i]){
+		pinMode(i+4, OUTPUT);
+                current_digital_pin_modes[i] = OUTPUT;
+            }
+            if(current_digital_outputs[i] != values[i]){
+		digitalWrite(i+4, (BinValue)values[i]);
+                current_digital_outputs[i] = values[i];
+            }
+        }
+        else if(current_digital_outputs[i]){    // Stopped writing
+	    digitalWrite(i+4, LOW);
+            current_digital_outputs[i] = 0.;
+        }
+    }
+}
+
+// Analog
+void Arduino::analogWrite(vector<float> pins, vector<float> values){
+	int PWK_pins[5]={5,6,9,10,11};
+	   for(int i = 0; i < (int)pins.size(); ++i){
+
+	       if(0. != pins[i]){      // Commanded writing
+		   if(OUTPUT != current_PWM_pin_modes[i]){
+		       pinMode(PWK_pins[i], OUTPUT);
+		       current_PWM_pin_modes[i] = OUTPUT;
+		   }
+		   if(current_PWM_outputs[i] != values[i]){
+		       analogWrite(PWK_pins[i], (int)values[i]);
+		       current_PWM_outputs[i] = values[i];
+
+		   }
+	       }
+	       else if(current_PWM_outputs[i]){    // Stopped writing
+		   analogWrite(PWK_pins[i], 0);
+		   current_PWM_outputs[i] = 0.;
+	       }
+	   }
+       }
+
+
+vector<float> Arduino::analogRead(vector<float> pins, int lightLim){
+    vector<float> reply(pins.size(), 0.);
+    for(int i = 0; i < (int)pins.size(); ++i){
+	if(0. != pins[i]){
+	    if(INPUT != current_analog_pin_modes[i]){
+		pinMode(i+14, INPUT);
+		current_analog_pin_modes[i] = INPUT;
+	    }
+	    reply[i] = (((float)analogRead(i+14)> lightLim)?0.0:1.0);
+
+	}
+	else reply[i] = 0.;  // Back to zero if not commanded
+    }
+   cout<<endl;
+    return reply;
+}
+
+
+
+string Arduino::error(){
+    return error_message;
+}

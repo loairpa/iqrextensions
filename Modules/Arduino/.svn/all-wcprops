@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino
+END
+.gitignore
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/.gitignore
+END
+moduleArduinoNew.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/SpikeInterface/!svn/ver/43/trunk/iqr1/StandardTypes/Modules/Arduino/moduleArduinoNew.hpp
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/COPYING
+END
+test.iqr
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/SpikeInterface/!svn/ver/43/trunk/iqr1/StandardTypes/Modules/Arduino/test.iqr
+END
+moduleArduinoAnalog.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/SpikeInterface/!svn/ver/92/trunk/iqr1/StandardTypes/Modules/Arduino/moduleArduinoAnalog.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino/Makefile
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino/CMakeLists.txt
+END
+moduleArduinoAnalog.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/SpikeInterface/!svn/ver/48/trunk/iqr1/StandardTypes/Modules/Arduino/moduleArduinoAnalog.hpp
+END
+arduino.cc
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino/arduino.cc
+END
+arduino.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/SpikeInterface/!svn/ver/56/trunk/iqr1/StandardTypes/Modules/Arduino/arduino.h
+END
+modulearduinoserial.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino/modulearduinoserial.cpp
+END
+moduleArduino.cc
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/moduleArduino.cc
+END
+modulearduinoserial.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino/modulearduinoserial.hpp
+END
+moduleArduino.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/moduleArduino.h
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/README
+END
+moduleArduinoNew.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/SpikeInterface/!svn/ver/94/trunk/iqr1/StandardTypes/Modules/Arduino/moduleArduinoNew.cpp
+END

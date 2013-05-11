@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/serialstream
+END
+SerialStream.cc
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/serialstream/SerialStream.cc
+END
+SerialStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/serialstream/SerialStream.h
+END
+SerialStreamBuf.cc
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/serialstream/SerialStreamBuf.cc
+END
+SerialStreamBuf.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/SpikeInterface/!svn/ver/41/trunk/iqr1/StandardTypes/Modules/Arduino/serialstream/SerialStreamBuf.h
+END

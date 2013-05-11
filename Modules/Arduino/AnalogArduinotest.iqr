@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE System PUBLIC '-//INI/iqr421' 'iqrSystem.dtd'>
+<System syncPlots="false" port="54923" author="lovisa" id="L-3792-1268348260-804538909" cylesPerSecond="100" name="arduino test system" date="Thu Mar 11 23:57:40 2010&#xa;">
+    <Note></Note>
+    <Process port="54923" path="" hostname="" id="L-3792-1268348264-610317501" name="ArduinoAnalog" enableModule="true" color="#FFFFFF">
+        <Module name="moduleArduinoAnalog">
+            <Parameter value="/dev/ttyUSB0" name="device_name"/>
+            <Parameter value="25" name="cps"/>
+            <Parameter value="150" name="speed"/>
+            <Parameter value="50" name="Light sensitivity"/>
+            <XRefHolder name="InputFromGroup">
+                <XRef target="" name="_digital_command_readout"/>
+                <XRef target="" name="_digital_command_writing"/>
+                <XRef target="" name="_digital_write"/>
+                <XRef target="" name="_analog_command_writing"/>
+                <XRef target="" name="_analog_write"/>
+                <XRef target="" name="_analog_read"/>
+            </XRefHolder>
+            <XRefHolder name="OutputToGroup">
+                <XRef target="" name="_digital_read"/>
+                <XRef target="" name="_analog_read"/>
+            </XRefHolder>
+        </Module>
+        <Note></Note>
+        <DiagramIcon width="50" x="75" y="97" height="50"/>
+        <Group id="L-2614-1268379614-1502762628" name="Comm. digit. read." color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="10"/>
+            </Topology>
+            <Neuron name="neuronLinearThreshold">
+                <Parameter value="1" name="excGain"/>
+                <Parameter value="1" name="inhGain"/>
+                <Parameter value="0" name="vmPrs"/>
+                <Parameter value="false" name="clipVm"/>
+                <Parameter value="0" name="vmMin"/>
+                <Parameter value="1" name="vmMax"/>
+                <Parameter value="1" name="probability"/>
+                <Parameter value="0" name="threshold"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="98" y="82" height="50"/>
+        </Group>
+        <Group id="L-2614-1268379646-898329654" name="Digit. read." color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="10"/>
+            </Topology>
+            <Neuron name="neuronAdaptiveIntegrateFire">
+                <Parameter value="3" name="excCond"/>
+                <Parameter value="1.5" name="inhCond"/>
+                <Parameter value="1" name="rm"/>
+                <Parameter value="-70" name="restPot"/>
+                <Parameter value="0" name="excPot"/>
+                <Parameter value="-70" name="inhPot"/>
+                <Parameter value="-50" name="threshold"/>
+                <Parameter value="-70" name="vmReset"/>
+                <Parameter value="1" name="refrPeriod"/>
+                <Parameter value="10" name="rcm"/>
+                <Parameter value="0.2" name="adaptChange"/>
+                <Parameter value="-70" name="adaptPot"/>
+                <Parameter value="10" name="rcsa"/>
+                <Parameter value="1" name="spkAmpl"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="101" y="177" height="50"/>
+        </Group>
+        <Group id="L-2614-1268379648-130407772" name="PWM write" color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="6"/>
+            </Topology>
+            <Neuron name="neuronLinearThreshold">
+                <Parameter value="1" name="excGain"/>
+                <Parameter value="1" name="inhGain"/>
+                <Parameter value="0" name="vmPrs"/>
+                <Parameter value="false" name="clipVm"/>
+                <Parameter value="0" name="vmMin"/>
+                <Parameter value="1" name="vmMax"/>
+                <Parameter value="1" name="probability"/>
+                <Parameter value="0" name="threshold"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="195" y="177" height="50"/>
+        </Group>
+        <Group id="L-30648-1330361423-1031160313" name="Comm. digt. writ." color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="10"/>
+            </Topology>
+            <Neuron name="neuronAdaptiveIntegrateFire">
+                <Parameter value="3" name="excCond"/>
+                <Parameter value="1.5" name="inhCond"/>
+                <Parameter value="1" name="rm"/>
+                <Parameter value="-70" name="restPot"/>
+                <Parameter value="0" name="excPot"/>
+                <Parameter value="-70" name="inhPot"/>
+                <Parameter value="-50" name="threshold"/>
+                <Parameter value="-70" name="vmReset"/>
+                <Parameter value="1" name="refrPeriod"/>
+                <Parameter value="10" name="rcm"/>
+                <Parameter value="0.2" name="adaptChange"/>
+                <Parameter value="-70" name="adaptPot"/>
+                <Parameter value="10" name="rcsa"/>
+                <Parameter value="1" name="spkAmpl"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="15" y="77" height="50"/>
+        </Group>
+        <Group id="L-30648-1330361425-1056976447" name="Digit. Writ." color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="10"/>
+            </Topology>
+            <Neuron name="neuronIntegrateFire">
+                <Parameter value="1" name="excGain"/>
+                <Parameter value="1" name="inhGain"/>
+                <Parameter value="0" name="vmPrs"/>
+                <Parameter value="false" name="clipVm"/>
+                <Parameter value="0" name="vmMin"/>
+                <Parameter value="1" name="vmMax"/>
+                <Parameter value="1" name="probability"/>
+                <Parameter value="1" name="threshold"/>
+                <Parameter value="1" name="spkAmpl"/>
+                <Parameter value="0" name="vmReset"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="13" y="178" height="50"/>
+        </Group>
+        <Group id="L-3413-1268411529-1111979019" name="Comm. PWM" color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="6"/>
+            </Topology>
+            <Neuron name="neuronLinearThreshold">
+                <Parameter value="1" name="excGain"/>
+                <Parameter value="1" name="inhGain"/>
+                <Parameter value="0" name="vmPrs"/>
+                <Parameter value="false" name="clipVm"/>
+                <Parameter value="0" name="vmMin"/>
+                <Parameter value="1" name="vmMax"/>
+                <Parameter value="1" name="probability"/>
+                <Parameter value="0" name="threshold"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="179" y="79" height="50"/>
+        </Group>
+        <Group id="L-7671-1368271427-256659568" name="Comm. an. Read" color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="2"/>
+            </Topology>
+            <Neuron name="neuronLinearThreshold">
+                <Parameter value="1" name="excGain"/>
+                <Parameter value="1" name="inhGain"/>
+                <Parameter value="0" name="vmPrs"/>
+                <Parameter value="false" name="clipVm"/>
+                <Parameter value="0" name="vmMin"/>
+                <Parameter value="1" name="vmMax"/>
+                <Parameter value="1" name="probability"/>
+                <Parameter value="0" name="threshold"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="253" y="76" height="50"/>
+        </Group>
+        <Group id="L-7671-1368271475-143469350" name="An. Read" color="#FFFFFF">
+            <Topology>
+                <TopologyRect cylinderHor="false" hcount="1" cylinderVert="false" vcount="2"/>
+            </Topology>
+            <Neuron name="neuronLinearThreshold">
+                <Parameter value="1" name="excGain"/>
+                <Parameter value="1" name="inhGain"/>
+                <Parameter value="0" name="vmPrs"/>
+                <Parameter value="false" name="clipVm"/>
+                <Parameter value="0" name="vmMin"/>
+                <Parameter value="1" name="vmMax"/>
+                <Parameter value="1" name="probability"/>
+                <Parameter value="0" name="threshold"/>
+            </Neuron>
+            <Note></Note>
+            <DiagramIcon width="50" x="268" y="174" height="50"/>
+        </Group>
+    </Process>
+</System>
+

@@ -1,0 +1,167 @@
+#include <ctime>
+#include <vector>
+#include "modulearduinoserial.hpp"
+
+
+<<<<<<< .mine
+MAKE_MODULE_DLL_INTERFACE(iqrcommon::ClsModuleArduino, "Arduino Servo Device")
+=======
+MAKE_MODULE_DLL_INTERFACE(iqrcommon::ClsModuleArduino, "Arduino Servo")
+>>>>>>> .r98
+
+iqrcommon::ClsModuleArduino::ClsModuleArduino() : ClsThreadModule() {
+    /*_strName,_strLabel,_strValue,_bEditable,_bLong,_strDescription,_strCategory*/
+
+
+	device_name = addStringParameter("device_name", "Device",
+				     "/dev/ttyUSB0", true, false,
+				     "serial port device name", "General");
+
+
+    par_cps = addIntParameter("cps", "Cycles/Second", 25, 0, 100000,
+			      "arduino evaluations per second", "General");
+    var_analog_speed=addIntParameter("speed","Analog write", 150,0,255,"Arduino analog strength", "General");
+
+    var_adjust_servo_command = addInputFromGroup("_adjust_servo_command ",
+			  "Command Adjust Servo ");
+    var_adjust_servo = addInputFromGroup("_adjust_servo ",
+					  "Adjust Servo");
+<<<<<<< .mine
+=======
+
+
+
+>>>>>>> .r98
+}
+
+#if 0
+moduleIcon iqrcommon::ClsModuleArduino::getIcon() {
+    moduleIcon mi(ModuleIcon_epuck_png_data,  ModuleIcon_epuck_png_len, 3 ,5);
+    return mi;
+}
+#endif
+
+void iqrcommon::ClsModuleArduino::checkWidth(StateArray& group, int width,
+					   const string& group_name){
+    if((int)group.getWidth() != width){
+	ostringstream w_int;
+	w_int<<width;
+	throw ModuleError(string("Module ") + label() + ": " + group_name +
+			  " group must be of size " + w_int.str());
+    }
+}
+
+void iqrcommon::ClsModuleArduino::init(){
+
+    StateArray& adjust_servo_command =
+	var_adjust_servo_command->getTarget()->getStateArray();
+    StateArray& adjust_servo= var_adjust_servo_command->getTarget()->getStateArray();
+
+
+<<<<<<< .mine
+    checkWidth(analog_command_writing, 6, "Command Analog Writing");
+    checkWidth(analog_write, 6, "Analog Writings");
+=======
+>>>>>>> .r98
+
+<<<<<<< .mine
+=======
+    checkWidth(digital_command_readout, 12, "Command Digital Readout");
+    checkWidth(digital_read, 12, "Digital Readings");
+    checkWidth(digital_command_writing, 12, "Command Digital Writing");
+    checkWidth(digital_write, 12, "Digital Writings");
+    checkWidth(adjust_servo_command, 12, "Command Adjust Servo");
+    checkWidth(adjust_servo,12, "Adjust Servo");
+>>>>>>> .r98
+
+
+    gettimeofday(&time_init, NULL);
+    elapsed_cicles = 0;
+}
+
+void iqrcommon::ClsModuleArduino::relax(){
+    struct timeval time_now;
+    double elapsed_time, next_computation_time, delta;
+    int cps = par_cps->getValue();
+    struct timespec sleep_time;
+
+    if(cps){            // User specified a cycles per second value
+	gettimeofday(&time_now, NULL);
+
+	elapsed_time = (time_now.tv_sec - time_init.tv_sec) +
+	    (time_now.tv_usec - time_init.tv_usec)/1e6;
+
+	next_computation_time = (double)elapsed_cicles/cps;
+	delta = next_computation_time - elapsed_time;
+
+	if(delta > 0){
+	    sleep_time.tv_sec = (time_t)floor(delta);
+	    delta -= floor(delta);
+	    sleep_time.tv_nsec = (long)(delta*1e9);
+	    nanosleep(&sleep_time, NULL);
+	}
+	++elapsed_cicles;
+    }
+}
+
+void iqrcommon::ClsModuleArduino::vectorToGroup(vector<float> origin,
+					      StateArray& destination){
+    for(int i = 0; i < (int)origin.size(); ++i)
+      destination[0][i] = origin[i];
+}
+
+void iqrcommon::ClsModuleArduino::update(){
+    relax();
+
+    StateArray& adjust_servo_command =
+	var_adjust_servo_command->getTarget()->getStateArray();
+    StateArray& adjust_servo = var_adjust_servo->getTarget()->getStateArray();
+
+
+<<<<<<< .mine
+=======
+
+>>>>>>> .r98
+    int speed = var_analog_speed->getValue();
+<<<<<<< .mine
+=======
+    vector<float> v_digital_command_readouts,v_digital_command_writings,
+    v_digital_write, v_adjust_servo_command, v_adjust_servo;
+>>>>>>> .r98
+
+<<<<<<< .mine
+    vector<float>  v_analog_command_writings, v_analog_write;
+
+=======
+
+>>>>>>> .r98
+    // Analog WRITE
+    for(int i = 0; i < (int)adjust_servo.getWidth(); ++i){
+	v_adjust_servo_command.push_back(adjust_servo_command[0][i]);
+	v_adjust_servo.push_back(adjust_servo[0][i]*speed);
+    //cout << analog_write[0][i]<< ",";
+    }
+    //cout<< endl;
+    arduino.analogWrite(v_adjust_servo_command, v_adjust_servo);
+
+
+
+
+<<<<<<< .mine
+=======
+    vectorToGroup(arduino.digitalRead(v_digital_command_readouts),
+		  digital_read);
+
+
+
+>>>>>>> .r98
+}
+
+void iqrcommon::ClsModuleArduino::cleanup(){
+
+<<<<<<< .mine
+=======
+
+>>>>>>> .r98
+    arduino.close();
+}

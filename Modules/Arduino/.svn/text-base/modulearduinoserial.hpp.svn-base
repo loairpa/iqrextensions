@@ -1,0 +1,54 @@
+#ifndef MODULEARDUINOSERIAL_HPP
+#define MODULEARDUINOSERIAL_HPP
+
+#include <Common/Item/threadModule.hpp>
+#include <sys/time.h>
+#include <QUdpSocket>
+#include "arduino.h"
+
+using namespace std;
+namespace iqrcommon{
+	class ClsModuleArduino : public ClsThreadModule{
+		public:
+			ClsModuleArduino();
+			void init();
+			void update();
+			void cleanup();
+
+
+		private:
+			ClsModuleArduino(const ClsModuleArduino&);
+
+	    StateVariablePtr* var_digital_command_readout;
+	    ClsStateVariable* var_digital_read;
+	    StateVariablePtr* var_digital_command_writing;
+	    StateVariablePtr* var_digital_write;
+	    StateVariablePtr* var_adjust_servo_command;
+	    StateVariablePtr* var_adjust_servo;
+
+
+	    ClsIntParameter* port;
+\
+
+	    Arduino arduino;
+
+	    ClsStringParameter *device_name;
+
+	    struct timeval time_init;
+	    int elapsed_cicles;
+	    ClsIntParameter *par_cps,*var_analog_speed;
+
+	    void checkWidth(StateArray& group, int width,
+			    const string& group_name);
+
+	    void relax();
+
+	    void vectorToGroup(vector<float> origin, StateArray& destination);
+
+	    QUdpSocket *pUdpSocket;
+
+	};
+}
+
+
+#endif // MODULEARDUINOSERIAL_HPP
